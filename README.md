@@ -43,6 +43,11 @@ docker compose up --build
 - Swagger UI: `http://localhost:8000/api/v1/schema/swagger-ui/`
 - ReDoc: `http://localhost:8000/api/v1/schema/redoc/`
 
+## Auth
+- JWT login: `POST /api/v1/auth/login/` (email/username + password) -> access/refresh
+- JWT refresh: `POST /api/v1/auth/refresh/` (refresh token) -> new access
+These endpoints are documented in Swagger UI.
+
 
 Refer to `docs/SETUP.md` for more details.
 A project to test SDK before release.

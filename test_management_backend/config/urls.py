@@ -18,6 +18,7 @@ from apps.test_execution.urls import router as test_execution_router
 from apps.dashboard.urls import router as dashboard_router
 from apps.configuration.urls import router as configuration_router
 from rest_framework.permissions import AllowAny
+from apps.authentication.views import LoginView, RefreshView
 
 router = DefaultRouter()
 for r in [
@@ -40,6 +41,8 @@ def healthcheck(_request):
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include(router.urls)),
+    path("api/v1/auth/login/", LoginView.as_view(), name="api_token_obtain_pair"),
+    path("api/v1/auth/refresh/", RefreshView.as_view(), name="api_token_refresh"),
     path("health/", healthcheck, name="healthcheck"),
     path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(

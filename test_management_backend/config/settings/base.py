@@ -211,11 +211,14 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     origin
     for origin in os.getenv(
-        "CORS_ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:8000"
+        "CORS_ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:8000,http://localhost:5173"
     ).split(",")
     if origin
 ]
 CORS_ALLOW_CREDENTIALS = True
+# Looser CORS for local development
+if DEBUG:  # type: ignore[name-defined]
+    CORS_ALLOW_ALL_ORIGINS = True
 
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", REDIS_URL or "redis://localhost:6379/1")
 CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", REDIS_URL or "redis://localhost:6379/2")
