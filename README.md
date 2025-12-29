@@ -46,6 +46,7 @@ docker compose up --build
 ## Auth
 - JWT login: `POST /api/v1/auth/login/` (email/username + password) -> access/refresh
 - JWT refresh: `POST /api/v1/auth/refresh/` (refresh token) -> new access
+- Current user: `GET /api/v1/auth/me/` (requires Authorization header)
 These endpoints are documented in Swagger UI.
 
 
