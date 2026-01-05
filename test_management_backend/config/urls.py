@@ -17,6 +17,7 @@ from apps.test_cases.urls import router as test_cases_router
 from apps.test_execution.urls import router as test_execution_router
 from apps.dashboard.urls import router as dashboard_router
 from apps.configuration.urls import router as configuration_router
+from apps.dispatcher.urls import router as dispatcher_router
 from rest_framework.permissions import AllowAny
 from apps.authentication.views import CurrentUserView, LoginView, RefreshView
 
@@ -28,6 +29,7 @@ for r in [
     test_execution_router,
     dashboard_router,
     configuration_router,
+    dispatcher_router,
 ]:
     for prefix, viewset, basename in r.registry:
         router.register(prefix, viewset, basename=basename)

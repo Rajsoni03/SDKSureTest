@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "apps.dashboard",
     "apps.configuration",
     "apps.core",
+    "apps.dispatcher",
 ]
 
 MIDDLEWARE = [
@@ -199,14 +200,16 @@ SPECTACULAR_SETTINGS = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": True,
     "ALGORITHM": "HS256",
     "SIGNING_KEY": SECRET_KEY,
 }
+
+SESSION_COOKIE_AGE = 60 * 60 * 8  # 8 hours
 
 CORS_ALLOWED_ORIGINS = [
     origin

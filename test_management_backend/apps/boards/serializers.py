@@ -95,12 +95,14 @@ class BoardLogSerializer(serializers.ModelSerializer):
 
 
 class BoardSerializer(serializers.ModelSerializer):
-    capabilities = serializers.PrimaryKeyRelatedField(
+    capabilities = CapabilitySerializer(many=True, read_only=True)
+    capability_ids = serializers.PrimaryKeyRelatedField(
+        source="capabilities",
         many=True,
         queryset=Capability.objects.all(),
         required=False,
+        write_only=True,
     )
-    capability_details = CapabilitySerializer(source="capabilities", many=True, read_only=True)
     relay = RelaySerializer(read_only=True)
     relay_id = serializers.PrimaryKeyRelatedField(
         source="relay",
@@ -149,7 +151,7 @@ class BoardSerializer(serializers.ModelSerializer):
             "last_used_at",
             "last_heartbeat_at",
             "capabilities",
-            "capability_details",
+            "capability_ids",
             "can_execute_test",
             "is_healthy",
         ]
@@ -159,9 +161,22 @@ class BoardSerializer(serializers.ModelSerializer):
             "updated_at",
             "last_used_at",
             "last_heartbeat_at",
-            "capability_details",
             "relay",
             "test_pc",
             "can_execute_test",
             "is_healthy",
         ]
+
+    def create(self, validated_data):
+        capabilities = validated_data.pop("capabilities", [])
+        board = super().create(validated_data)
+        if capabilities:
+            board.capabilities.set(capabilities)
+        return board
+
+    def update(self, instance, validated_data):
+        capabilities = validated_data.pop("capabilities", None)
+        board = super().update(instance, validated_data)
+        if capabilities is not None:
+            board.capabilities.set(capabilities)
+        return board

@@ -10,20 +10,8 @@ from django.utils.translation import gettext_lazy as _
 class Capability(models.Model):
     """Represents a capability that a board can support."""
 
-    CAPABILITY_CHOICES = [
-        ("CMD", _("Command Execution")),
-        ("CAMERA", _("Camera Testing")),
-        ("DISPLAY", _("Display Output")),
-        ("SOUND", _("Sound/Audio")),
-        ("FILE", _("File System")),
-        ("SENSOR", _("Sensor Reading")),
-        ("GPIO", _("GPIO Control")),
-        ("ADC", _("Analog-to-Digital")),
-        ("NETWORK", _("Network Connectivity")),
-    ]
-
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, help_text="Unique identifier")
-    name = models.CharField(max_length=50, choices=CAPABILITY_CHOICES, unique=True, help_text="Capability name")
+    name = models.CharField(max_length=100, unique=True, help_text="Capability name")
     description = models.TextField(blank=True, help_text="Detailed description of this capability")
     is_active = models.BooleanField(default=True, help_text="Whether this capability can be used")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -35,7 +23,7 @@ class Capability(models.Model):
         indexes = [models.Index(fields=["name"])]
 
     def __str__(self):
-        return f"{self.get_name_display()}"
+        return self.name
 
     def __repr__(self):
         return f"<Capability: {self.name}>"
