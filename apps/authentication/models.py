@@ -5,22 +5,24 @@ from django.db import models
 
 
 class CustomUserManager(UserManager):
-    """Custom manager that uses email as username."""
+    """Custom manager that uses username as the authentication field."""
 
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, username, email=None, password=None, **extra_fields):
+        if not username:
+            raise ValueError("Username is required")
         if not email:
             raise ValueError("Email is required")
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
+    def create_superuser(self, username, email=None, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("role", "SUPER_ADMIN")
-        return self.create_user(email, password, **extra_fields)
+        return self.create_user(username, email, password, **extra_fields)
 
 
 class User(AbstractUser):
@@ -51,8 +53,8 @@ class User(AbstractUser):
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email"]
 
     class Meta:
         ordering = ["-created_at"]
@@ -63,7 +65,7 @@ class User(AbstractUser):
         ]
 
     def __str__(self):
-        return f"{self.email} ({self.get_role_display()})"
+        return f"{self.username} ({self.get_role_display()})"
 
     @property
     def is_super_admin(self):

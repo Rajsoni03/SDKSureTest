@@ -12,7 +12,7 @@ from .serializers import UserSerializer
     summary="Login to obtain access and refresh tokens",
 )
 class LoginView(TokenObtainPairView):
-    """JWT login endpoint (email/username + password)."""
+    """JWT login endpoint (username + password)."""
 
 
 @extend_schema(
