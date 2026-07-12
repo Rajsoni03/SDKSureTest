@@ -1,68 +1,47 @@
-"""Root URL configuration."""
+"""
+URL configuration for config project.
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/5.2/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
 from django.contrib import admin
-from django.http import JsonResponse
-from django.urls import include, path
+from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from drf_spectacular.views import (
-    SpectacularAPIView,
-    SpectacularRedocView,
-    SpectacularSwaggerView,
-)
-
-from django.conf import settings
-
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from apps.authentication.urls import router as auth_router
-from apps.boards.urls import router as boards_router
-from apps.test_cases.urls import router as test_cases_router
-from apps.test_execution.urls import router as test_execution_router
-from apps.dashboard.urls import router as dashboard_router
-from apps.configuration.urls import router as configuration_router
-from apps.dispatcher.urls import router as dispatcher_router
-from rest_framework.permissions import AllowAny
-from apps.authentication.views import CurrentUserView, LoginView, RefreshView
+from apps.devices.urls import router as devices_router
 
+# Routers
 router = DefaultRouter()
-for r in [
+app_routers = [
     auth_router,
-    boards_router,
-    test_cases_router,
-    test_execution_router,
-    dashboard_router,
-    configuration_router,
-    dispatcher_router,
-]:
+    devices_router,
+]
+for r in app_routers:
     for prefix, viewset, basename in r.registry:
         router.register(prefix, viewset, basename=basename)
 
 
-def healthcheck(_request):
-    """Simple healthcheck endpoint."""
-    return JsonResponse({"status": "ok"})
-
-
+# URL patterns
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("api/v1/", include(router.urls)),
-    path("api/v1/auth/login/", LoginView.as_view(), name="api_token_obtain_pair"),
-    path("api/v1/auth/refresh/", RefreshView.as_view(), name="api_token_refresh"),
-    path("api/v1/auth/me/", CurrentUserView.as_view(), name="api_auth_me"),
-    path("health/", healthcheck, name="healthcheck"),
+    path('admin/', admin.site.urls),
+    path('api/v1/', include(router.urls)),
+    path('api/v1/auth/', include('apps.authentication.urls')),
+
+    # Swagger/OpenAPI schema endpoints
     path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema"),
-    path(
-        "api/v1/schema/swagger-ui/",
-        SpectacularSwaggerView.as_view(url_name="schema"),
-        name="swagger-ui",
-    ),
-    path(
-        "api/v1/schema/redoc/",
-        SpectacularRedocView.as_view(url_name="schema"),
-        name="redoc",
-    ),
+    path("api/v1/schema/swagger-ui/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("api/v1/schema/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
 ]
 
-# if settings.DEBUG:
-    # try:
-        # import debug_toolbar
-        # urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
-    # except Exception:
-    #     pass
+# openapi-generator-cli generate -i api.yaml -g typescript-axios -o src/services/
