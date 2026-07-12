@@ -1,2 +1,0 @@
-# Boards tests package
-

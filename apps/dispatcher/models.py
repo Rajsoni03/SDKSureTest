@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.boards.models import Board, TestPC
+from apps.devices.models import Board, Workstation
 
 
 class TestRequest(models.Model):
@@ -18,7 +18,7 @@ class TestRequest(models.Model):
 
     # execution targets
     executed_on_board = models.ForeignKey(Board, on_delete=models.SET_NULL, null=True, blank=True)
-    executed_on_pc = models.ForeignKey(TestPC, on_delete=models.SET_NULL, null=True, blank=True)
+    executed_on_workstation = models.ForeignKey(Workstation, on_delete=models.SET_NULL, null=True, blank=True)
 
     # priority and requirements
     priority = models.IntegerField(default=0, help_text="Higher values are scheduled first")

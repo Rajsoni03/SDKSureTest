@@ -5,7 +5,7 @@ from typing import Iterable, List, Set
 from django.db import transaction
 from django.utils import timezone
 
-from apps.boards.models import Board
+from apps.devices.models import Board
 from apps.dispatcher.models import TestRequest
 
 logger = logging.getLogger(__name__)

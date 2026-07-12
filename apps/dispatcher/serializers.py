@@ -29,7 +29,7 @@ class TestRequestSerializer(serializers.ModelSerializer):
             "status",
             "timeout",
             "executed_on_board",
-            "executed_on_pc",
+            "executed_on_workstation",
             "created_at",
             "started_at",
             "completed_at",

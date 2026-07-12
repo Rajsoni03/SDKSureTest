@@ -49,17 +49,21 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_spectacular",
     "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     "channels",
     "corsheaders",
+    "django_filters",
     # Local apps
+    "core",
     "apps.authentication",
-    "apps.boards",
+    "apps.configuration",
     "apps.dashboard",
     "apps.devices",
+    "apps.test_cases",
+    "apps.test_execution",
     "apps.test_management",
     "apps.test_run",
     "apps.scheduler",
-    "apps.core",
     "apps.jenkins",
     "apps.cicd",
     "apps.reports",
@@ -97,6 +101,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 ASGI_APPLICATION = 'config.asgi.application'
+
+AUTH_USER_MODEL = 'authentication.User'
 
 
 # Database

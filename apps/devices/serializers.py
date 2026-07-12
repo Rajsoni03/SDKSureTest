@@ -32,6 +32,7 @@ class RelaySerializer(serializers.ModelSerializer):
             "is_healthy",
         ]
         read_only_fields = ["id", "created_at", "updated_at", "last_checked_at", "is_healthy"]
+        extra_kwargs = {"password": {"write_only": True}}
 
 
 class WorkstationSerializer(serializers.ModelSerializer):

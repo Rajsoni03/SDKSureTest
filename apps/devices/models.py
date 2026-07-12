@@ -162,7 +162,8 @@ class Board(models.Model):
         ("j742s2", lazt_load("TI J742S2")),
         ("j784s4", lazt_load("TI J784S4")),
         ("j7200", lazt_load("TI J7200")),
-        ("am62a", lazt_load("TI AM62A"))
+        ("tda54", lazt_load("TI TDA54")),
+        ("tda54_vdk", lazt_load("TI TDA54 VDK")),
     ]
 
     STATUS_CHOICES = [
