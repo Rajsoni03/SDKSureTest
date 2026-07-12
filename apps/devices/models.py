@@ -120,6 +120,8 @@ class Workstation(models.Model):
     ram_utilization = models.FloatField(default=0, help_text="Current RAM load percentage")
     disk_utilization = models.FloatField(default=0, help_text="Current disk load percentage")
     docker_container_count = models.PositiveIntegerField(default=0, help_text="Number of active Docker containers")
+    sysconn_version = models.CharField(max_length=50, blank=True, default="", help_text="SysConn agent version installed on this workstation")
+    sysconn_commit = models.CharField(max_length=100, blank=True, default="", help_text="SysConn agent git commit hash")
     notes = models.TextField(blank=True, help_text="Additional notes about this Workstation")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

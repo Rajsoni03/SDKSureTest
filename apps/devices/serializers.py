@@ -56,6 +56,8 @@ class WorkstationSerializer(serializers.ModelSerializer):
             "ram_utilization",
             "disk_utilization",
             "docker_container_count",
+            "sysconn_version",
+            "sysconn_commit",
             "notes",
             "created_at",
             "updated_at",
