@@ -1,4 +1,6 @@
-from rest_framework import permissions, viewsets
+import requests as http_requests
+from django.utils import timezone
+from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -41,6 +43,33 @@ class WorkstationViewSet(viewsets.ModelViewSet):
     queryset = Workstation.objects.all().order_by("hostname")
     search_fields = ["hostname", "ip_address", "domain_name"]
     ordering_fields = ["hostname", "status", "os_version", "created_at", "updated_at"]
+
+    @action(detail=True, methods=["post"], url_path="ping")
+    def ping(self, request, pk=None):
+        """Hit the workstation's health endpoint and update its status."""
+        workstation = self.get_object()
+        host = workstation.domain_name or workstation.ip_address
+        url = f"http://{host}:5500/health"
+        try:
+            resp = http_requests.get(url, timeout=5)
+            health_data = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else {}
+            is_ok = resp.status_code == 200 and health_data.get("status") == "ok"
+            workstation.status = "ONLINE" if is_ok else "OFFLINE"
+            workstation.last_heartbeat_at = timezone.now()
+            workstation.save(update_fields=["status", "last_heartbeat_at"])
+            return Response({
+                "health": health_data,
+                "workstation": WorkstationSerializer(workstation).data,
+            })
+        except Exception as exc:
+            workstation.status = "OFFLINE"
+            workstation.last_heartbeat_at = timezone.now()
+            workstation.save(update_fields=["status", "last_heartbeat_at"])
+            return Response(
+                {"detail": f"Health check failed: {exc}",
+                 "workstation": WorkstationSerializer(workstation).data},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
 
 
 class BoardViewSet(viewsets.ModelViewSet):

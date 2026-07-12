@@ -208,7 +208,7 @@ AUTH_LDAP_CONNECTION_OPTIONS = {
 AUTH_LDAP_SERVER_URI = CONFIG_DICT['AUTH_LDAP_SERVER_URI']
 AUTH_LDAP_BIND_DN = ""
 AUTH_LDAP_BIND_PASSWORD = ""
-AUTH_LDAP_USER_SEARCH = LDAPSearch("dc=ti,dc=com", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+AUTH_LDAP_USER_SEARCH = LDAPSearch("o=ti,c=us", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
 
 AUTH_LDAP_USER_ATTR_MAP = {'username': 'uid',
                            'first_name': 'givenName',

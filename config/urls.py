@@ -20,12 +20,20 @@ from rest_framework.routers import DefaultRouter
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from apps.authentication.urls import router as auth_router
 from apps.devices.urls import router as devices_router
+from apps.dashboard.urls import router as dashboard_router
+from apps.test_cases.urls import router as test_cases_router
+from apps.test_execution.urls import router as test_execution_router
+from apps.configuration.urls import router as configuration_router
 
 # Routers
 router = DefaultRouter()
 app_routers = [
     auth_router,
     devices_router,
+    dashboard_router,
+    test_cases_router,
+    test_execution_router,
+    configuration_router,
 ]
 for r in app_routers:
     for prefix, viewset, basename in r.registry:
