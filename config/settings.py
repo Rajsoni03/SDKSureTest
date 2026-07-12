@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "corsheaders",
     # Local apps
     "apps.authentication",
+    "apps.boards",
     "apps.dashboard",
     "apps.devices",
     "apps.test_management",

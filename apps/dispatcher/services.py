@@ -117,4 +117,10 @@ class DispatcherService:
         }
 
 
+# NOTE: This module-level singleton creates one DispatcherService instance per
+# process.  In a multi-process deployment (e.g. gunicorn with multiple workers)
+# each worker holds its own threading.Lock, so the lock provides NO cross-process
+# mutual exclusion.  For true cross-process serialisation, replace the
+# threading.Lock with a distributed lock (e.g. Redis SETNX / redlock) or move
+# scheduling to a single Celery worker.
 dispatcher_service = DispatcherService()

@@ -113,7 +113,7 @@ class Workstation(models.Model):
     auth_token = models.CharField(max_length=200, blank=True, default="", help_text="Token used to authenticate with the Workstation")
     workarea = models.CharField(max_length=50, blank=True, default="", help_text="Logical work area name/location")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="OFFLINE", help_text="Workstation status")
-    os_version = models.CharField(max_length=50, choices=OS_VERSION_CHOICES, default="ubuntu_22.04", help_text="Operating system version")
+    os_version = models.CharField(max_length=50, choices=OS_VERSION_CHOICES, default="ubuntu_22_04", help_text="Operating system version")
     disk_mountpoint = models.CharField(max_length=255, default="/", help_text="Primary disk mount point")
     location = models.CharField(max_length=255, blank=True, help_text="Physical location in lab/datacenter/rack")
     cpu_utilization = models.FloatField(default=0, help_text="Current CPU load percentage")
